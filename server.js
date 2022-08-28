@@ -5,9 +5,10 @@ const PORT = 3000;
 var config = require("./config");
 const Thread = require("./models/Thread");
 
+app.use(express.json());
 app.use(express.static("public"));
 
-mongoose.connect(`mongodb+srv://TK:${config.mongoPW}@cluster0.szjqwe3.mongodb.net/threads?retryWrites=true&w=majority`)
+mongoose.connect(config.mongoConnect)
 .then(() => console.log("DB connected!!"))
 .catch((err) => console.log(err));
 
@@ -22,7 +23,7 @@ app.get("/api/v1/threads", async(req,res) => {
 });
 
 // post method
-app.get("/api/v1/thread", async(req,res) => {
+app.post("/api/v1/thread", async(req,res) => {
     try {
         const createThread = await Thread.create(req.body);
         res.status(200).json(createThread);
